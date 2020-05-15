@@ -10,6 +10,7 @@ $(() => {
     data => {
       buildOpenSkyDB(data);
       calculateflights(openSkyDB);
+      fastestPlane(openSkyDB);
     },
     error => {
       console.log(error);
@@ -17,17 +18,33 @@ $(() => {
   ); //end of ajax
 }); //end of DOM load
 
-let numberOfFlights = 0;
+const buildOpenSkyDB = apidata => {
+  for (const item of apidata.states) {
+    openSkyDB.push(item);
+  }
+  console.log(openSkyDB);
+};
+
 const calculateflights = apidata => {
+  let numberOfFlights = 0;
   for (const state of apidata) {
     numberOfFlights += 1;
   }
   $counterDiv = $("<div>")
-    .html(`<p>Flights in-air right now</p><p>${numberOfFlights}</p>`)
+    .html(`<p>Current flights in-air</p><p>${numberOfFlights}</p>`)
     .addClass("counter");
   $(".counters").append($counterDiv);
 };
-
-const buildOpenSkyDB = apidata => {
-  for (const item in apidata.states) openSkyDB.push(apidata.states[item]);
+const fastestPlane = apidata => {
+  let planeSpeed = 0;
+  for (const item of apidata) {
+    if (item[9] > planeSpeed) {
+      planeSpeed = item[9];
+    }
+  }
+  planeSpeed = Math.floor(planeSpeed * 2.24);
+  $counterDiv = $("<div>")
+    .html(`<p>Fastest Plane by ground speed (MPH)</p><p>${planeSpeed}</p>`)
+    .addClass("counter");
+  $(".counters").append($counterDiv);
 };
