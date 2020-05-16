@@ -3,3 +3,11 @@
   flex-direction: row;
   justify-content: space-around;
 }
+.flightform{
+  display: flex;
+  flex-direction: row;
+}
+.btn{
+  background-color: lightblue;
+  border-radius: 15px;
+}
