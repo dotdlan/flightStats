@@ -21,6 +21,7 @@ $(() => {
     let $value = $("input").val();
     calculateflights(openSkyDB, $value);
     fastestPlane(openSkyDB, $value);
+    highestPlane(openSkyDB, $value);
   });
 }); //end of DOM load
 
@@ -82,16 +83,28 @@ const fastestPlane = (apidata, lookUpCountry) => {
 };
 
 //let's figure out which is the highest
-const highestPlane = apidata => {
+const highestPlane = (apidata, lookUpCountry) => {
   let highPlane = 0;
   for (const item of apidata) {
-    if (item[7] > highPlane) {
-      highPlane = item[7];
+    if (lookUpCountry) {
+      if (item[2] === lookUpCountry) {
+        if (item[7] > highPlane) {
+          highPlane = item[7];
+        }
+      }
+    } else {
+      if (item[7] > highPlane) {
+        highPlane = item[7];
+      }
     }
   }
   highPlane = Math.floor(highPlane * 3.281);
   $counterDiv = $("<div>")
     .html(`<p>Highest plane in the sky (feet)</p><p>${highPlane}</p>`)
-    .addClass("counter");
-  $(".counters").append($counterDiv);
+    .addClass("height-counter");
+  if (lookUpCountry) {
+    $(".height-counter").replaceWith($counterDiv);
+  } else {
+    $(".counters").append($counterDiv);
+  }
 };
