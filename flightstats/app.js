@@ -5,13 +5,13 @@ $(() => {
     //accessing this url each time costs .5second to 1.5seconds,
     //this will be exponetially bad
     //store the result once and resuse it to speed it up.
-    url: "" //"https://opensky-network.org/api/states/all"
+    url: "https://opensky-network.org/api/states/all"
   }).then(
     data => {
-      // buildOpenSkyDB(data);
-      // calculateflights(openSkyDB);
-      // fastestPlane(openSkyDB);
-      // highestPlane(openSkyDB);
+      buildOpenSkyDB(data);
+      calculateflights(openSkyDB);
+      fastestPlane(openSkyDB);
+      highestPlane(openSkyDB);
     },
     error => {
       console.log(error);
@@ -19,7 +19,7 @@ $(() => {
   ); //end of ajax
   $(".btn").on("click", event => {
     let $value = $("input").val();
-    console.log($value);
+    calculateflights(openSkyDB, $value);
   });
 }); //end of DOM load
 
@@ -31,15 +31,29 @@ const buildOpenSkyDB = apidata => {
 };
 
 //let's calculate the total number of flights in the air.
-const calculateflights = apidata => {
+const calculateflights = (apidata, lookUpCountry) => {
   let numberOfFlights = 0;
   for (const state of apidata) {
-    numberOfFlights += 1;
+    if (lookUpCountry) {
+      if (state[2] === lookUpCountry) {
+        console.log(state[2]);
+        console.log(lookUpCountry);
+        console.log(state[2] === lookUpCountry);
+        numberOfFlights += 1;
+      }
+    } else {
+      numberOfFlights += 1;
+    }
   }
+
   $counterDiv = $("<div>")
     .html(`<p>Current flights in-air</p><p>${numberOfFlights}</p>`)
-    .addClass("counter");
-  $(".counters").append($counterDiv);
+    .addClass("flight-counter");
+  if (lookUpCountry) {
+    $(".flight-counter").replaceWith($counterDiv);
+  } else {
+    $(".counters").append($counterDiv);
+  }
 };
 
 //let's figure out which is the fastest
