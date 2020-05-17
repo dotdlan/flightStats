@@ -9,6 +9,7 @@ $(() => {
   }).then(
     data => {
       buildOpenSkyDB(data);
+      buildCountrySelector(openSkyDB);
       calculateflights(openSkyDB);
       fastestPlane(openSkyDB);
       highestPlane(openSkyDB);
@@ -18,7 +19,7 @@ $(() => {
     }
   ); //end of ajax
   $(".btn").on("click", event => {
-    let $value = $("input").val();
+    let $value = $("select").val();
     calculateflights(openSkyDB, $value);
     fastestPlane(openSkyDB, $value);
     highestPlane(openSkyDB, $value);
@@ -32,15 +33,34 @@ const buildOpenSkyDB = apidata => {
   }
 };
 
+//let's populate our country selector
+const buildCountrySelector = apidata => {
+  const countries = [];
+  for (const item of apidata)
+    if (countries.includes(item[2])) {
+    } else {
+      countries.push(item[2]);
+    }
+  countries.sort();
+  for (const country of countries) {
+    $countries = $("#World");
+    console.log($countries);
+    $newCountry = $("<option>")
+      .attr("value", `${country}`)
+      .text(country);
+    console.log($newCountry);
+    $countries.append($newCountry);
+  }
+};
+
 //let's calculate the total number of flights in the air.
 const calculateflights = (apidata, lookUpCountry) => {
   let numberOfFlights = 0;
+  console.log(lookUpCountry === undefined);
   for (const state of apidata) {
-    if (lookUpCountry) {
-      if (state[2] === lookUpCountry) {
-        numberOfFlights += 1;
-      }
-    } else {
+    if (lookUpCountry === undefined || lookUpCountry === "World") {
+      numberOfFlights += 1;
+    } else if (state[2] === lookUpCountry) {
       numberOfFlights += 1;
     }
   }
@@ -59,13 +79,12 @@ const calculateflights = (apidata, lookUpCountry) => {
 const fastestPlane = (apidata, lookUpCountry) => {
   let planeSpeed = 0;
   for (const item of apidata) {
-    if (lookUpCountry) {
-      if (item[2] === lookUpCountry) {
-        if (item[9] > planeSpeed) {
-          planeSpeed = item[9];
-        }
+    let i = 0;
+    if (lookUpCountry === undefined || lookUpCountry === "World") {
+      if (item[9] > planeSpeed) {
+        planeSpeed = item[9];
       }
-    } else {
+    } else if (item[2] === lookUpCountry) {
       if (item[9] > planeSpeed) {
         planeSpeed = item[9];
       }
@@ -86,13 +105,11 @@ const fastestPlane = (apidata, lookUpCountry) => {
 const highestPlane = (apidata, lookUpCountry) => {
   let highPlane = 0;
   for (const item of apidata) {
-    if (lookUpCountry) {
-      if (item[2] === lookUpCountry) {
-        if (item[7] > highPlane) {
-          highPlane = item[7];
-        }
+    if (lookUpCountry === undefined || lookUpCountry === "World") {
+      if (item[7] > highPlane) {
+        highPlane = item[7];
       }
-    } else {
+    } else if (item[2] === lookUpCountry) {
       if (item[7] > highPlane) {
         highPlane = item[7];
       }
