@@ -13,6 +13,7 @@ $(() => {
       calculateflights(openSkyDB);
       fastestPlane(openSkyDB);
       highestPlane(openSkyDB);
+      generateFlightTracker(openSkyDB);
     },
     error => {
       console.log(error);
@@ -23,6 +24,32 @@ $(() => {
     calculateflights(openSkyDB, $value);
     fastestPlane(openSkyDB, $value);
     highestPlane(openSkyDB, $value);
+  });
+  $(".track-flight").on("click", event => {
+    if ($(".track-flight").hasClass("selected")) {
+    } else {
+      $(".flight-stats")
+        .css("background-color", "lightgrey")
+        .removeClass("selected");
+      $(".track-flight")
+        .css("background-color", "lightblue")
+        .addClass("selected");
+      $(".stat-container").toggle();
+      $(".track-container").toggle();
+    }
+  });
+  $(".flight-stats").on("click", event => {
+    if ($(".flight-stats").hasClass("selected")) {
+    } else {
+      $(".flight-stats")
+        .css("background-color", "lightblue")
+        .addClass("selected");
+      $(".track-flight")
+        .css("background-color", "lightgrey")
+        .removeClass("selected");
+      $(".stat-container").toggle();
+      $(".track-container").toggle();
+    }
   });
 }); //end of DOM load
 
@@ -141,12 +168,40 @@ const highestPlane = (apidata, lookUpCountry) => {
   }
 };
 
+//Let's make a map image. Pass it an array from the openSkyDB and it'll find the coordinates
 const getMap = mapRecord => {
   $map = $("<img>")
     .addClass("map")
     .attr(
-      "src"
-      // ``
+      "src",
+      `https://maps.googleapis.com/maps/api/staticmap?zoom=5&size=250x250&maptype=hybrid&markers=color:blue|${mapRecord[6]},${mapRecord[5]}&key=AIzaSyACJV6r7RNNeasGt_vdvf3lhFC71dZFn04`
     );
   return $map;
+};
+//let's generate a second hidden page within our /index.html that will be
+//revealed with .toggle() when the user clicks "Track Flight"
+const generateFlightTracker = apidata => {
+  $trackContainer = $(".track-container");
+  $trackForm = $("<form>");
+  $trackInput = $("<input>").attr("type", "text");
+  $trackInput.attr("placeholder", "Flight Number:'AAL1234'");
+  $trackInput.attr("id", "tracker-form");
+  $trackSubmit = $("<div>")
+    .attr("id", "track-submit")
+    .text("Submit");
+  $(".container").append($trackContainer);
+  $trackContainer.append($trackForm);
+  $trackForm.append($trackInput).append($trackSubmit);
+  $("#track-submit").on("click", event => {
+    //would like to make this more durable, if someone uses lowercase flight numbers, for example
+    $flightNumber = $("#tracker-form").val();
+    let record = [];
+    for (const item of apidata) {
+      if ($flightNumber === item[1].trim()) {
+        record = item;
+      }
+    }
+    //need to add some logic so that this won't display multiple map imgs with subsequent clicks
+    $trackContainer.append(getMap(record));
+  });
 };

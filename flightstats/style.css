@@ -1,3 +1,12 @@
+.flight-stats{
+  display: inline;
+  background-color:lightblue
+}
+.track-flight{
+  display: inline;
+  background-color: lightgrey;
+}
+
 .counters{
   display: flex;
   flex-direction: row;
@@ -13,4 +22,12 @@
 }
 .map{
   border-radius: 175px;
+}
+.track-container{
+  display: none;
+}
+#track-submit{
+  background-color: lightblue;
+  display: inline;
+  border-radius: 15px;
 }
