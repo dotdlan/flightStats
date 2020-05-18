@@ -1,30 +1,88 @@
+body{
+  background-color: LightSteelBlue;
+}
+
+.container > h1{
+  text-align: center;
+}
+
+.header{
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
 .flight-stats{
-  display: inline;
-  background-color:lightblue
+  background-color:lightblue;
+  border-radius: 5px;
+  padding: 2px;
+}
+.flight-stats:hover{
+  text-decoration: underline;
 }
 .track-flight{
-  display: inline;
   background-color: lightgrey;
+  border-radius: 5px;
+  padding: 2px;
+}
+.track-flight:hover{
+  background-color: lightgreen;
+  text-decoration: underline;
 }
 
 .counters{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  flex-wrap: wrap;
+  width: 75%;
+  margin: 0 auto;
+  text-align: center;
+}
+.counters *{
+  width: 225px;
 }
 .flightform{
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
 }
 .btn{
   background-color: lightblue;
   border-radius: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.btn:hover{
+  background-color: lightgreen;
+  text-decoration: underline;
 }
 .map{
-  border-radius: 175px;
+  border-radius: 115px;
 }
 .track-container{
   display: none;
+}
+.track-container h1{
+  text-align: center;
+}
+.track-a-flight img{
+  width: 250px;
+  margin-top: 25px;
+  align-self: center;
+}
+.track-a-flight{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+  width: 275px;
+  flex-wrap: wrap;
 }
 #track-submit{
   background-color: lightblue;

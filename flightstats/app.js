@@ -71,11 +71,9 @@ const buildCountrySelector = apidata => {
   countries.sort();
   for (const country of countries) {
     $countries = $("#World");
-    console.log($countries);
     $newCountry = $("<option>")
       .attr("value", `${country}`)
       .text(country);
-    console.log($newCountry);
     $countries.append($newCountry);
   }
 };
@@ -83,7 +81,6 @@ const buildCountrySelector = apidata => {
 //let's calculate the total number of flights in the air.
 const calculateflights = (apidata, lookUpCountry) => {
   let numberOfFlights = 0;
-  console.log(lookUpCountry === undefined);
   for (const state of apidata) {
     if (lookUpCountry === undefined || lookUpCountry === "World") {
       numberOfFlights += 1;
@@ -174,7 +171,7 @@ const getMap = mapRecord => {
     .addClass("map")
     .attr(
       "src",
-      `https://maps.googleapis.com/maps/api/staticmap?zoom=5&size=250x250&maptype=hybrid&markers=color:blue|${mapRecord[6]},${mapRecord[5]}&key=AIzaSyACJV6r7RNNeasGt_vdvf3lhFC71dZFn04`
+      `https://maps.googleapis.com/maps/api/staticmap?zoom=5&size=300x300&maptype=hybrid&markers=color:blue|${mapRecord[6]},${mapRecord[5]}&key=AIzaSyACJV6r7RNNeasGt_vdvf3lhFC71dZFn04`
     );
   return $map;
 };
@@ -182,6 +179,7 @@ const getMap = mapRecord => {
 //revealed with .toggle() when the user clicks "Track Flight"
 const generateFlightTracker = apidata => {
   $trackContainer = $(".track-container");
+  $trackAFlight = $("<div>").addClass("track-a-flight");
   $trackForm = $("<form>");
   $trackInput = $("<input>").attr("type", "text");
   $trackInput.attr("placeholder", "Flight Number:'AAL1234'");
@@ -189,8 +187,8 @@ const generateFlightTracker = apidata => {
   $trackSubmit = $("<div>")
     .attr("id", "track-submit")
     .text("Submit");
-  $(".container").append($trackContainer);
-  $trackContainer.append($trackForm);
+  $trackContainer.append($trackAFlight);
+  $trackAFlight.append($trackForm);
   $trackForm.append($trackInput).append($trackSubmit);
   $("#track-submit").on("click", event => {
     //would like to make this more durable, if someone uses lowercase flight numbers, for example
@@ -202,6 +200,6 @@ const generateFlightTracker = apidata => {
       }
     }
     //need to add some logic so that this won't display multiple map imgs with subsequent clicks
-    $trackContainer.append(getMap(record));
+    $trackAFlight.append(getMap(record));
   });
 };
