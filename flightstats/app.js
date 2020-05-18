@@ -78,50 +78,75 @@ const calculateflights = (apidata, lookUpCountry) => {
 //let's figure out which is the fastest
 const fastestPlane = (apidata, lookUpCountry) => {
   let planeSpeed = 0;
+  let record = [];
   for (const item of apidata) {
     let i = 0;
     if (lookUpCountry === undefined || lookUpCountry === "World") {
       if (item[9] > planeSpeed) {
         planeSpeed = item[9];
+        record = item;
       }
     } else if (item[2] === lookUpCountry) {
       if (item[9] > planeSpeed) {
         planeSpeed = item[9];
+        record = item;
       }
     }
   }
+  let $map = getMap(record);
+  //let's convert from knots to mph
   planeSpeed = Math.floor(planeSpeed * 2.24);
   $counterDiv = $("<div>")
-    .html(`<p>Fastest Plane by ground speed (MPH)</p><p>${planeSpeed}</p>`)
+    .html(
+      `<p>Fastest Plane by ground speed</p><p>${record[1]}: ${planeSpeed}MPH</p>`
+    )
     .addClass("speed-counter");
   if (lookUpCountry) {
-    $(".speed-counter").replaceWith($counterDiv);
+    $(".speed-counter").replaceWith($counterDiv.append($map));
   } else {
-    $(".counters").append($counterDiv);
+    $(".counters").append($counterDiv.append($map));
   }
 };
 
 //let's figure out which is the highest
 const highestPlane = (apidata, lookUpCountry) => {
   let highPlane = 0;
+  let record = [];
   for (const item of apidata) {
     if (lookUpCountry === undefined || lookUpCountry === "World") {
       if (item[7] > highPlane) {
         highPlane = item[7];
+        record = item;
       }
     } else if (item[2] === lookUpCountry) {
       if (item[7] > highPlane) {
         highPlane = item[7];
+        record = item;
       }
     }
   }
+  let $map = getMap(record);
+  //let's convert this from meters to feet
   highPlane = Math.floor(highPlane * 3.281);
   $counterDiv = $("<div>")
-    .html(`<p>Highest plane in the sky (feet)</p><p>${highPlane}</p>`)
+    .html(
+      `<p>Highest plane in the sky</p><p>${record[1] ||
+        "Unknown"}: ${highPlane}ft</p>`
+    )
     .addClass("height-counter");
   if (lookUpCountry) {
-    $(".height-counter").replaceWith($counterDiv);
+    $(".height-counter").replaceWith($counterDiv.append($map));
   } else {
-    $(".counters").append($counterDiv);
+    $(".counters").append($counterDiv.append($map));
   }
+};
+
+const getMap = mapRecord => {
+  $map = $("<img>")
+    .addClass("map")
+    .attr(
+      "src"
+      // ``
+    );
+  return $map;
 };
