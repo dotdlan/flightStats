@@ -1,4 +1,5 @@
 console.log("it works");
+const staticKey = "AIzaSyACJV6r7RNNeasGt_vdvf3lhFC71dZFn04";
 const openSkyDB = [];
 $(() => {
   $.ajax({
@@ -88,15 +89,21 @@ const calculateflights = (apidata, lookUpCountry) => {
       numberOfFlights += 1;
     }
   }
-
+  $worldMap = $("<img>")
+    .attr(
+      "src",
+      `https://maps.googleapis.com/maps/api/staticmap?&maptype=hybrid&center=Bermuda&zoom=1&size=300x300&key=${staticKey}`
+    )
+    .addClass("map");
   $counterDiv = $("<div>")
-    .html(`<p>Current flights in-air</p><p>${numberOfFlights}</p>`)
+    .html(`<p>Flights in-air</p><p>${numberOfFlights}</p>`)
     .addClass("flight-counter");
   if (lookUpCountry) {
     $(".flight-counter").replaceWith($counterDiv);
   } else {
     $(".counters").append($counterDiv);
   }
+  $(".flight-counter").append($worldMap);
 };
 
 //let's figure out which is the fastest
@@ -121,9 +128,7 @@ const fastestPlane = (apidata, lookUpCountry) => {
   //let's convert from knots to mph
   planeSpeed = Math.floor(planeSpeed * 2.24);
   $counterDiv = $("<div>")
-    .html(
-      `<p>Fastest Plane by ground speed</p><p>${record[1]}: ${planeSpeed}MPH</p>`
-    )
+    .html(`<p>Fastest Plane</p><p>${record[1]}: ${planeSpeed}MPH</p>`)
     .addClass("speed-counter");
   if (lookUpCountry) {
     $(".speed-counter").replaceWith($counterDiv.append($map));
@@ -154,8 +159,7 @@ const highestPlane = (apidata, lookUpCountry) => {
   highPlane = Math.floor(highPlane * 3.281);
   $counterDiv = $("<div>")
     .html(
-      `<p>Highest plane in the sky</p><p>${record[1] ||
-        "Unknown"}: ${highPlane}ft</p>`
+      `<p>Highest plane</p><p>${record[1] || "Unknown"}: ${highPlane}ft</p>`
     )
     .addClass("height-counter");
   if (lookUpCountry) {
@@ -171,7 +175,7 @@ const getMap = mapRecord => {
     .addClass("map")
     .attr(
       "src",
-      `https://maps.googleapis.com/maps/api/staticmap?zoom=5&size=300x300&maptype=hybrid&markers=color:blue|${mapRecord[6]},${mapRecord[5]}&key=AIzaSyACJV6r7RNNeasGt_vdvf3lhFC71dZFn04`
+      `https://maps.googleapis.com/maps/api/staticmap?zoom=5&size=300x300&maptype=hybrid&markers=color:blue|${mapRecord[6]},${mapRecord[5]}&key=${staticKey}`
     );
   return $map;
 };
