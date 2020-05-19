@@ -186,28 +186,37 @@ const getMap = mapRecord => {
 //let's generate a second hidden page within our /index.html that will be
 //revealed with .toggle() when the user clicks "Track Flight"
 const generateFlightTracker = apidata => {
-  $trackContainer = $(".track-container");
-  $trackAFlight = $("<div>").addClass("track-a-flight");
-  $trackForm = $("<form>");
-  $trackInput = $("<input>").attr("type", "text");
-  $trackInput.attr("placeholder", "Flight Number:'AAL1234'");
-  $trackInput.attr("id", "tracker-form");
-  $trackSubmit = $("<div>")
+  const $trackContainer = $(".track-container");
+  const $trackAFlight = $("<div>").addClass("track-a-flight");
+  const $trackForm = $("<form>");
+  const $trackInput = $("<input>").attr("type", "text");
+  const $trackSubmit = $("<div>")
     .attr("id", "track-submit")
     .text("Submit");
+  const $worldMap = getMap("World");
+  $trackInput.attr("placeholder", "Flight Number:'AAL1234'");
+  $trackInput.attr("id", "tracker-form");
   $trackContainer.append($trackAFlight);
   $trackAFlight.append($trackForm);
+  $trackAFlight.append($worldMap);
   $trackForm.append($trackInput).append($trackSubmit);
+  //let's make a click handler for our fligt tracker submit button
   $("#track-submit").on("click", event => {
-    //would like to make this more durable, if someone uses lowercase flight numbers, for example
-    $flightNumber = $("#tracker-form").val();
+    //would like to make this more durable like
+    //if user inputs something that errors/doesn't return anything
+    let $flightNumber = $("#tracker-form")
+      .val()
+      .toUpperCase();
     let record = [];
     for (const item of apidata) {
       if ($flightNumber === item[1].trim()) {
         record = item;
       }
     }
-    //need to add some logic so that this won't display multiple map imgs with subsequent clicks
-    $trackAFlight.append(getMap(record));
+    //replace current map image with a new one
+    $(".track-a-flight")
+      .children("img")
+      .last()
+      .replaceWith(getMap(record));
   });
 };
