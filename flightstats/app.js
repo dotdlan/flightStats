@@ -1,5 +1,4 @@
 console.log("it works");
-const staticKey = "AIzaSyACJV6r7RNNeasGt_vdvf3lhFC71dZFn04";
 const openSkyDB = [];
 $(() => {
   $.ajax({
@@ -89,12 +88,7 @@ const calculateflights = (apidata, lookUpCountry) => {
       numberOfFlights += 1;
     }
   }
-  $worldMap = $("<img>")
-    .attr(
-      "src",
-      `https://maps.googleapis.com/maps/api/staticmap?&maptype=hybrid&center=Bermuda&zoom=1&size=300x300&key=${staticKey}`
-    )
-    .addClass("map");
+  let $worldMap = getMap("World");
   $counterDiv = $("<div>")
     .html(`<p>Flights in-air</p><p>${numberOfFlights}</p>`)
     .addClass("flight-counter");
@@ -171,12 +165,22 @@ const highestPlane = (apidata, lookUpCountry) => {
 
 //Let's make a map image. Pass it an array from the openSkyDB and it'll find the coordinates
 const getMap = mapRecord => {
-  $map = $("<img>")
-    .addClass("map")
-    .attr(
-      "src",
-      `https://maps.googleapis.com/maps/api/staticmap?zoom=5&size=300x300&maptype=hybrid&markers=color:blue|${mapRecord[6]},${mapRecord[5]}&key=${staticKey}`
-    );
+  //store the parts of our map fetching url that don't change between requets
+  const staticKey = "AIzaSyACJV6r7RNNeasGt_vdvf3lhFC71dZFn04";
+  const staticURL =
+    "https://maps.googleapis.com/maps/api/staticmap?maptype=hybrid&size=300x300";
+  if (mapRecord === "World") {
+    $map = $("<img>")
+      .attr("src", `${staticURL}&center=Bermuda&zoom=1&key=${staticKey}`)
+      .addClass("map");
+  } else {
+    $map = $("<img>")
+      .addClass("map")
+      .attr(
+        "src",
+        `${staticURL}&zoom=5&markers=color:blue|${mapRecord[6]},${mapRecord[5]}&key=${staticKey}`
+      );
+  }
   return $map;
 };
 //let's generate a second hidden page within our /index.html that will be
