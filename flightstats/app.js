@@ -194,7 +194,7 @@ const generateFlightTracker = apidata => {
     .attr("id", "track-submit")
     .text("Submit");
   const $worldMap = getMap("World");
-  $trackInput.attr("placeholder", "Flight Number:'AAL1234'");
+  $trackInput.attr("placeholder", "Flight Number:'JBU736'");
   $trackInput.attr("id", "tracker-form");
   $trackContainer.append($trackAFlight);
   $trackAFlight.append($trackForm);

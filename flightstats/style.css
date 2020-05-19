@@ -45,6 +45,8 @@ body{
 }
 .counters *{
   width: 225px;
+  margin-left: 5px;
+  margin-right: 5px
 }
 .flightform{
   display: flex;
@@ -68,7 +70,7 @@ body{
 .track-container{
   display: none;
 }
-.track-container h1{
+.track-container h2{
   text-align: center;
 }
 .track-a-flight img{
@@ -88,8 +90,11 @@ body{
   background-color: lightblue;
   display: inline;
   border-radius: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .footer{
+  margin-top: 75px;
   text-align: center;
 }
 .footer a{
