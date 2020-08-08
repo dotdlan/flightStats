@@ -106,4 +106,4 @@ dist
 ignore app.yaml files
 app.yaml
 
-*/.idea
+.idea/
